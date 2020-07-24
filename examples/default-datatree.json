@@ -1,0 +1,138 @@
+{
+    "title": "dummy var",
+    "searchBox": true,
+    "menus": true,
+    "treeData": [
+        {
+            "title": "GIS 1",
+            "type": "gis-widget",
+            "data": {
+                "DOM_id": "gis-0",
+                "scale": true,
+                "attribution": false,
+                "popup": true,
+                "mapOpts": {
+                    "center": [
+                        58.8,
+                        2.5
+                    ],
+                    "minZoom": 3,
+                    "maxZoom": 16,
+                    "zoom": 6
+                }
+            },
+            "children": [
+                {
+                    "title": "Base maps",
+                    "radiogroup": true,
+                    "folder": true,
+                    "children": [
+                        {
+                            "title": "OpenStreetMap",
+                            "type": "GIS-layer-basemap",
+                            "checkbox": "radio",
+                            "selected": true,
+                            "data": {
+                                "layerType": "WMS",
+                                "url": "http://ows.terrestris.de/osm/service",
+                                "layerOpts": {
+                                    "layers": "OSM-WMS",
+                                    "CRS": "EPSG:4326",
+                                    "version": "1.1.1",
+                                    "format": "image/png",
+                                    "transparent": false,
+                                    "noWrap": true,
+                                    "opacity": 1,
+                                    "attribution": "&copy; <a target='_blank' href='https://www.openstreetmap.org/copyright'>OpenStreetMap</a>"
+                                }
+                            }
+                        },
+                        {
+                            "title": "GEBCO",
+                            "type": "GIS-layer-basemap",
+                            "checkbox": "radio",
+                            "selected": false,
+                            "data": {
+                                "layerType": "WMS",
+                                "url": "https://www.gebco.net/data_and_products/gebco_web_services/web_map_service/mapserv",
+                                "layerOpts": {
+                                    "layers": "GEBCO_LATEST",
+                                    "CRS": "EPSG:4326",
+                                    "version": "1.3.0",
+                                    "format": "image/png",
+                                    "transparent": false,
+                                    "noWrap": true,
+                                    "opacity": 1,
+                                    "attribution": "<a target='_blank' href='https://www.gebco.net/'>GEBCO</a>"
+                                }
+                            }
+                        },
+                        {
+                            "title": "Esri WorldImagery",
+                            "type": "GIS-layer-basemap",
+                            "checkbox": "radio",
+                            "selected": false,
+                            "data": {
+                                "layerType": "WMS",
+                                "url": "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
+                                "layerOpts": {
+                                    "attribution": "Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community"
+                                }
+                            }
+                        },
+                        {
+                            "title": "No background",
+                            "type": "GIS-layer-basemap",
+                            "checkbox": "radio",
+                            "selected": false,
+                            "data": {
+                                "layerType": "tilemap",
+                                "url": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAQAAAAEAAQMAAABmvDolAAAAA1BMVEX///+nxBvIAAAAH0lEQVQYGe3BAQ0AAADCIPunfg43YAAAAAAAAAAA5wIhAAAB9aK9BAAAAABJRU5ErkJggg=="
+                            }
+                        }                        
+                    ]
+                },
+                {
+                    "title": "Regional maps",
+                    "folder": true,
+                    "children": [
+                        {
+                            "title": "Norway (NOR)",
+                            "lazy": true,
+                            "data": {
+                                "fancytree": "/data/NOR-map-data.json"
+                            }
+                        },
+                        {
+                            "title": "UK (GBR)",
+                            "lazy": true,
+                            "data": {
+                                "fancytree": "/data/GBR-map-data.json"
+                            }
+                        },
+                        {
+                            "title": "Miscellaneous resources",
+                            "lazy": true,
+                            "data": {
+                                "fancytree": "/data/misc-map-data.json"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "title": "TEST maps",
+                    "folder": true,
+                    "children": [
+                        {
+                            "title": "test lazy load",
+                            "lazy": true,
+                            "data": {
+                                "fancytree": "/data/test-ll.json"
+                            }
+                        }
+                    ]
+                }                
+            ]
+        }
+    ]
+}

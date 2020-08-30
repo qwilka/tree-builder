@@ -5,7 +5,6 @@
     "treeData": [
         {
             "title": "GIS 1",
-            "type": "gis-widget",
             "data": {
                 "DOM_id": "gis-0",
                 "scale": true,
@@ -26,6 +25,7 @@
                     "title": "Base maps",
                     "radiogroup": true,
                     "folder": true,
+                    "icon": "fas fa-street-view",
                     "children": [
                         {
                             "title": "OpenStreetMap",

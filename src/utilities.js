@@ -1,4 +1,6 @@
-import { each, find } from '@lumino/algorithm';
+// import { each, find } from '@lumino/algorithm';
+const each = lumino_algorithm.each;
+const find = lumino_algorithm.find;
 
 import {mainApp} from './index';
 

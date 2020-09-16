@@ -1,6 +1,8 @@
+webpack --mode development
 https://www.jsdelivr.com/?query=lumino
 https://github.com/mar10/fancytree/issues/188  FancyTree Right click event for custom context menu
 https://wwwendt.de/tech/fancytree/demo/#sample-api.html
+https://www.w3schools.com/icons/icons_reference.asp
 
 
 https://developer.mozilla.org/en-US/docs/Web/API/IndexedDB_API/Using_IndexedDB
@@ -33,3 +35,171 @@ https://www.jsdelivr.com/?query=lumino
 Pyodide
 ========
 https://hacks.mozilla.org/2019/04/pyodide-bringing-the-scientific-python-stack-to-the-browser/
+
+
+JSONeditor
+============
+http://jsoneditoronline.org/
+https://github.com/josdejong/jsoneditor
+https://cdnjs.com/libraries/jsoneditor   version 9.0.4
+https://github.com/eligrey/FileSaver.js
+http://bgrins.github.io/filereader.js/
+https://cdn.jsdelivr.net/npm/@json-editor/json-editor@2.3.0/dist/jsoneditor.min.js
+https://unpkg.com/json-editor@0.7.28/dist/jsoneditor.js
+
+
+
+=============================================================
+// https://github.com/mar10/fancytree/wiki/ExtDnd5
+
+    extensions: ["glyph", "edit", "dnd5"],
+    dnd5: {
+      autoExpandMS: 1500,
+      preventRecursion: true, // Prevent dropping nodes on own descendants
+      preventVoidMoves: true, // Prevent dropping nodes 'before self', etc.
+      preventSameParent: false,
+      preventLazyParents: true,
+      preventNonNodes: true,
+      multiSource: false,
+      dropMarkerInsertOffsetX: -19,
+      dropMarkerParent: "body",
+  
+      // --- Drag Support --------------------------------------------------------
+      // https://github.com/mar10/fancytree/wiki/ExtDnd5
+
+      dragStart: function(node, data) {
+        // Called on source node when user starts dragging `node`.
+        // This method MUST be defined to enable dragging for tree nodes!
+        // We can
+        //   - Add or modify the drag data using `data.dataTransfer.setData()`.
+        //   - Call `data.dataTransfer.setDragImage()` and set `data.useDefaultImage` to false.
+        //   - Return false to cancel dragging of `node`.
+  
+        // Set the allowed effects (i.e. override the 'effectAllowed' option)
+        data.effectAllowed = "all";  // or 'copyMove', 'link'', ...
+  
+        // Set a drop effect (i.e. override the 'dropEffectDefault' option)
+        // One of 'copy', 'move', 'link'.
+        // In order to use a common modifier key mapping, we can use the suggested value:
+        data.dropEffect = data.dropEffectSuggested;
+  
+        // We could also define a custom image here (not on IE though):
+  //    data.dataTransfer.setDragImage($("<div>TEST</div>").appendTo("body")[0], -10, -10);
+  //    data.useDefaultImage = false;
+  
+        // Return true to allow the drag operation
+        //if( node.isFolder() ) { return false; }
+        return true;
+      },
+      dragDrag: function(node, data) {
+        // Called on source node every few milliseconds while `node` is dragged.
+        // Implementation of this callback is optional and rarely required.
+      },
+      dragEnd: function(node, data) {
+        // Called on source node when the drag operation has terminated.
+        // Check `data.isCancelled` to see if a drop occurred.
+        // Implementation of this callback is optional and rarely required.
+        // Note caveat: 
+        // If the drop handler removed or moved the dragged source element,  
+        // `node` and `data` may not contain expected values, or this event
+        // is not triggered at all.
+      },
+  
+      // --- Drop Support --------------------------------------------------------
+  
+      dragEnter: function(node, data) {
+        // Called on target node when s.th. is dragged over `node`.
+        // `data.otherNode` may be a Fancytree source node or null for 
+        // non-Fancytree droppables.
+        // This method MUST be defined to enable dropping over tree nodes!
+        //
+        // We may
+        //   - Set `data.dropEffect` (defaults to '')
+        //   - Call `data.setDragImage()`
+        //
+        // Return
+        //   - true to allow dropping (calc the hitMode from the cursor position)
+        //   - false to prevent dropping (dragOver and dragLeave are not called)
+        //   - a list (e.g. ["before", "after"]) to restrict available hitModes
+        //   - "over", "before, or "after" to force a hitMode
+        //   - Any other return value will calc the hitMode from the cursor position.
+  
+        // Example:
+        // Prevent dropping a parent below another parent (only sort nodes under
+        // the same parent):
+  //    if(node.parent !== data.otherNode.parent){
+  //      return false;
+  //    }
+        // Example:
+        // Don't allow dropping *over* a node (which would create a child). Just
+        // allow changing the order:
+  //    return ["before", "after"];
+  
+        // Accept everything:
+        return true;
+      },
+      dragOver: function(node, data) {
+        // Called on target node every few milliseconds while some source is 
+        // dragged over it.
+        // `data.hitMode` contains the calculated insertion point, based on cursor
+        // position and the response of `dragEnter`.
+        //
+        // We may
+        //   - Override `data.hitMode`
+        //   - Set `data.dropEffect` (defaults to the value that of dragEnter)
+        //     (Note: IE will ignore this and use the value from dragenter instead!)
+        //   - Call `data.dataTransfer.setDragImage()`
+  
+        // Set a drop effect (i.e. override the 'dropEffectDefault' option)
+        // One of 'copy', 'move', 'link'.
+        // In order to use a common modifier key mapping, we can use the suggested value:
+        data.dropEffect = data.dropEffectSuggested;
+      },
+      dragExpand: function(node, data) {
+        // Called when a dragging cursor lingers over a parent node.
+        // (Optional) Return false to prevent auto-expanding `node`.
+      },
+      dragLeave: function(node, data) {
+        // Called when s.th. is no longer dragged over `node`.
+        // Implementation of this callback is optional and rarely required.
+      },
+      dragDrop: function(node, data) {
+        // This function MUST be defined to enable dropping of items on the tree.
+        //
+        // The source data is provided in several formats:
+        //   `data.otherNode` (null if it's not a FancytreeNode from the same page)
+        //   `data.otherNodeData` (Json object; null if it's not a FancytreeNode)
+        //   `data.dataTransfer.getData()`
+        //
+        // We may access some meta data to decide what to do:
+        //   `data.hitMode` ("before", "after", or "over").
+        //   `data.dataTransfer.dropEffect`,`.effectAllowed`
+        //   `data.originalEvent.shiftKey`, ...
+        //
+        // Example:
+  
+        var transfer = data.dataTransfer;
+  
+        node.debug("drop", data);
+  
+        if( data.otherNode ) {
+          // Drop another Fancytree node from same frame
+          // (maybe from another tree however)
+          var sameTree = (data.otherNode.tree === data.tree);
+  
+          data.otherNode.moveTo(node, data.hitMode);
+        } else if( data.otherNodeData ) {
+          // Drop Fancytree node from different frame or window, so we only have
+          // JSON representation available
+          node.addChild(data.otherNodeData, data.hitMode);
+        } else {
+          // Drop a non-node
+          node.addNode({
+            title: transfer.getData("text")
+          }, data.hitMode);
+        }
+        // Expand target node when a child was created:
+        node.setExpanded();
+      }
+    },
+==============================================================

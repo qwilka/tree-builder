@@ -1,13 +1,18 @@
 //import * as PouchDB from 'pouchdb';
-import {
-  BoxPanel, Widget, DockPanel
-} from '@lumino/widgets';
+// import {
+//   BoxPanel, Widget, DockPanel
+// } from '@lumino/widgets';
+const Widget = lumino_widgets.Widget;
+const BoxPanel = lumino_widgets.BoxPanel;
+const DockPanel = lumino_widgets.DockPanel;
 
 import './vn-styles.css';
 
 import { createMenus } from './menus';
 import { commands } from './commands';
 import { attachDatatree } from './datatree';
+import { DataEditWidget } from './data-editor';
+
 
 
 export let mainApp;

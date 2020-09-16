@@ -1,6 +1,7 @@
-import {
-  CommandRegistry
-} from '@lumino/commands';
+// import {
+//   CommandRegistry
+// } from '@lumino/commands';
+const CommandRegistry = lumino_commands.CommandRegistry;
 
 import {get_mainApp_widget} from './utilities';
 // import {createGisWidget} from './gis/gis-ol-app';

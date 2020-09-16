@@ -10,6 +10,9 @@ import { commands } from './commands';
 // http://wwwendt.de/tech/fancytree/demo/sample-ext-edit.html#
 // triggerStart: ["clickActive", "dblclick", "f2", "mac+enter", "shift+click"],
 // https://wwwendt.de/tech/fancytree/doc/jsdoc/Fancytree_Widget.html
+// https://github.com/swisnl/jQuery-contextMenu/tree/master/src/icons
+// https://www.w3schools.com/icons/icons_reference.asp
+// https://github.com/mar10/fancytree/wiki/ExtDnd5
 
 let copy_data = null;
 
@@ -157,13 +160,13 @@ const build_contextMenu = ($trigger, evt) => {
             icon: "fas fa-level-down-alt",
             callback: (key, opt) => {
               let id_number = node.getIndex();
-              node.addNode({title:"NEW CHILD NODE"}, "child");
+              node.addNode({title:"NEW CHILD NODE", key: make_nodeid()}, "child");
             }
           },
           "sep1": "---------",
           "paste-child-node": {
             name: "Paste child node(s)",
-            icon: "fas fa-level-down-alt",
+            icon: "paste",
             disabled: !copy_data,
             callback: (key, opt) => {
               let id_number = node.getIndex();
@@ -210,7 +213,7 @@ const build_contextMenu = ($trigger, evt) => {
             icon: "fas fa-long-arrow-alt-up", 
             callback: (key, opt) => {
               let id_number = node.getIndex();
-              node.addNode({title:"NEW NODE before"}, "before");
+              node.addNode({title:"NEW NODE before", key: make_nodeid()}, "before");
             }
           },
           "append-node": {
@@ -218,7 +221,7 @@ const build_contextMenu = ($trigger, evt) => {
             icon: "fas fa-long-arrow-alt-down", 
             callback: (key, opt) => {
               let id_number = node.getIndex();
-              node.addNode({title:"NEW NODE after"}, "after");
+              node.addNode({title:"NEW NODE after", key: make_nodeid()}, "after");
             }
           },
           "add-child-node": {
@@ -226,7 +229,7 @@ const build_contextMenu = ($trigger, evt) => {
             icon: "fas fa-level-down-alt",
             callback: (key, opt) => {
               let id_number = node.getIndex();
-              node.addNode({title:"NEW CHILD NODE"}, "child");
+              node.addNode({title:"NEW CHILD NODE", key: make_nodeid()}, "child");
             }
           },
           "sep2": "---------",
@@ -289,11 +292,20 @@ const build_contextMenu = ($trigger, evt) => {
                 return "Delete branch";
               }
             },
-            icon: "fas fa-trash-alt", 
+            icon: "far fa-trash-alt", 
             callback: (key, opt) => {
               let idx = node.getIndex();
               //node.addNode({title:"NEW NODE before"}, "before");
               node.remove();
+            }
+          },
+          "sep4": "---------",
+          "show-data": {
+            name: "Show node data",
+            icon: "fas fa-database",
+            callback: (key, opt) => {
+              let idx = node.getIndex();
+              console.log(`${node.name} key=${node.key}`);
             }
           },
         }
@@ -307,7 +319,7 @@ commands.addCommand('create-new-tree', {
   caption: 'Create a new tree',
   execute: () => {
     console.log('Create a new tree');
-    let source = [{title: "rootnode", key: "1", "folder": true, myOwnAttr: "no-data-tree"}];
+    let source = [{title: "rootnode", key: make_nodeid(), "folder": true, myOwnAttr: "no-data-tree"}];
     $("#datatree").fancytree("option", "source", source);
   }
 });
@@ -320,11 +332,24 @@ commands.addCommand('export-tree', {
     console.log('Export tree (JSON)');
     //let tree = $('#datatree').fancytree('getTree');
     let tree = $.ui.fancytree.getTree("#datatree");
-    let tdata = tree.toDict();
-    console.log('tdata = ', tdata);
+    //let root = tree.getRootNode()
+    let fname = "vntree.json"
+    let ftdata = tree.toDict();  // ftdata is a "list"
+    let vnObj = fancytree2vntree(ftdata[0]); // assuming there is one top-level node (the rootnode)
+    console.log('ftdata = ', ftdata);
+    console.log('vnObj = ', vnObj);
+    const blob = new Blob([JSON.stringify(vnObj)], {type: 'application/json;charset=utf-8'})
+    saveAs(blob, fname)
   }
 });
 
+
+function make_nodeid() {
+  // https://github.com/uuidjs/uuid
+  let _nodeid = uuidv4();
+  _nodeid = _nodeid.replace(/-/g, "");
+  return _nodeid;
+}
 
 
 // commands.addCommand('add-node', {
@@ -335,3 +360,42 @@ commands.addCommand('export-tree', {
 //     $("#datatree").fancytree("option", "source", source);
 //   }
 // });
+
+function fancytree2vntree(ftObj) {
+  let hasChilds, vnObj = {"name":"", "data":{"_vntree":{}, "_fancytree":{}}};
+  for (let kk in ftObj){
+    if(ftObj.hasOwnProperty(kk)){
+      console.log(`${kk} : ${ftObj[kk]}`);
+      hasChilds = false;
+      switch(kk) {
+        case "title":
+          vnObj.name = ftObj.title
+          break;
+        case "key":
+          if (ftObj[kk].length === 32) {
+            vnObj.data._vntree["_nodeid"] = ftObj[kk];
+          }
+          vnObj.name = ftObj.title
+          break;
+        case "data":
+          Object.assign(vnObj.data, ftObj.data);
+          break;
+        case "children":
+          hasChilds = true;
+          break;
+        default:
+          vnObj.data._fancytree[kk] = ftObj[kk]
+      }
+
+    }
+ }  
+ if (hasChilds) {
+  vnObj.childs = [];
+  let childObj;
+  for (let ii=0; ii<ftObj.children.length; ii++) {
+    childObj = fancytree2vntree(ftObj.children[ii]);
+    vnObj.childs.push(childObj);
+  }
+ }
+ return vnObj;
+}

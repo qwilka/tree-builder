@@ -1,6 +1,9 @@
-import {
-  Menu, MenuBar
-} from '@lumino/widgets';
+// import {
+//   Menu, MenuBar
+// } from '@lumino/widgets';
+const Menu = lumino_widgets.Menu;
+const MenuBar = lumino_widgets.MenuBar;
+
 
 import { commands } from './commands';
 

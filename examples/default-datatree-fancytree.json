@@ -1,12 +1,10 @@
 {
-    "text": "dummy var",
+    "title": "dummy var",
     "searchBox": true,
     "menus": true,
     "treeData": [
         {
-            "text": "GIS 1",
-            "state" : { "opened" : true, "selected" : true },
-            "icon" : "fas fa-tree",
+            "title": "GIS 1",
             "data": {
                 "DOM_id": "gis-0",
                 "scale": true,
@@ -24,12 +22,16 @@
             },
             "children": [
                 {
-                    "text": "Base maps",
-                    "type": "folder",
+                    "title": "Base maps",
+                    "radiogroup": true,
+                    "folder": true,
+                    "icon": "fas fa-street-view",
                     "children": [
                         {
-                            "text": "OpenStreetMap",
+                            "title": "OpenStreetMap",
                             "type": "GIS-layer-basemap",
+                            "checkbox": "radio",
+                            "selected": true,
                             "data": {
                                 "layerType": "WMS",
                                 "url": "http://ows.terrestris.de/osm/service",
@@ -46,7 +48,10 @@
                             }
                         },
                         {
-                            "text": "GEBCO",
+                            "title": "GEBCO",
+                            "type": "GIS-layer-basemap",
+                            "checkbox": "radio",
+                            "selected": false,
                             "data": {
                                 "layerType": "WMS",
                                 "url": "https://www.gebco.net/data_and_products/gebco_web_services/web_map_service/mapserv",
@@ -63,7 +68,10 @@
                             }
                         },
                         {
-                            "text": "Esri WorldImagery",
+                            "title": "Esri WorldImagery",
+                            "type": "GIS-layer-basemap",
+                            "checkbox": "radio",
+                            "selected": false,
                             "data": {
                                 "layerType": "WMS",
                                 "url": "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
@@ -73,7 +81,10 @@
                             }
                         },
                         {
-                            "text": "No background",
+                            "title": "No background",
+                            "type": "GIS-layer-basemap",
+                            "checkbox": "radio",
+                            "selected": false,
                             "data": {
                                 "layerType": "tilemap",
                                 "url": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAQAAAAEAAQMAAABmvDolAAAAA1BMVEX///+nxBvIAAAAH0lEQVQYGe3BAQ0AAADCIPunfg43YAAAAAAAAAAA5wIhAAAB9aK9BAAAAABJRU5ErkJggg=="
@@ -82,22 +93,26 @@
                     ]
                 },
                 {
-                    "text": "Regional maps",
+                    "title": "Regional maps",
+                    "folder": true,
                     "children": [
                         {
-                            "text": "Norway (NOR)",
+                            "title": "Norway (NOR)",
+                            "lazy": true,
                             "data": {
                                 "fancytree": "/data/NOR-map-data.json"
                             }
                         },
                         {
-                            "text": "UK (GBR)",
+                            "title": "UK (GBR)",
+                            "lazy": true,
                             "data": {
                                 "fancytree": "/data/GBR-map-data.json"
                             }
                         },
                         {
-                            "text": "Miscellaneous resources",
+                            "title": "Miscellaneous resources",
+                            "lazy": true,
                             "data": {
                                 "fancytree": "/data/misc-map-data.json"
                             }
@@ -105,10 +120,12 @@
                     ]
                 },
                 {
-                    "text": "TEST maps",
+                    "title": "TEST maps",
+                    "folder": true,
                     "children": [
                         {
-                            "text": "test lazy load",
+                            "title": "test lazy load",
+                            "lazy": true,
                             "data": {
                                 "fancytree": "/data/test-ll.json"
                             }

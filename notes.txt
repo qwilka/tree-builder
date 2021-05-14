@@ -1,5 +1,11 @@
+python3 -m http.server 8003
+http://localhost:8002/vntree/
+
+
 webpack --mode development
 https://www.jsdelivr.com/?query=lumino
+https://www.jsdelivr.com/?query=author%3A%20jupyterlab&page=1
+https://github.com/stefanpenner/es6-promise
 https://github.com/mar10/fancytree/issues/188  FancyTree Right click event for custom context menu
 https://wwwendt.de/tech/fancytree/demo/#sample-api.html
 https://www.w3schools.com/icons/icons_reference.asp
@@ -47,6 +53,11 @@ http://bgrins.github.io/filereader.js/
 https://cdn.jsdelivr.net/npm/@json-editor/json-editor@2.3.0/dist/jsoneditor.min.js
 https://unpkg.com/json-editor@0.7.28/dist/jsoneditor.js
 
+
+JsTree
+=======
+var nodeId = $(#tree).jstree(true).get_node("node_name");
+https://stackoverflow.com/questions/7162272/how-to-change-icon-in-jstree
 
 
 =============================================================

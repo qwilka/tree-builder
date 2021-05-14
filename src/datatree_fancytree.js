@@ -1,159 +1,90 @@
-
+// import 'jquery.fancytree/dist/skin-awesome/ui.fancytree.css'
+// import $ from 'jquery';  
+// import 'jquery.fancytree';
+// import 'jquery.fancytree/dist/modules/jquery.fancytree.glyph';
+// import 'jquery-contextmenu/dist/jquery.contextMenu.css';  
+// import 'jquery-contextmenu';
 
 import { commands } from './commands';
 
+// http://wwwendt.de/tech/fancytree/demo/sample-ext-edit.html#
+// triggerStart: ["clickActive", "dblclick", "f2", "mac+enter", "shift+click"],
+// https://wwwendt.de/tech/fancytree/doc/jsdoc/Fancytree_Widget.html
+// https://github.com/swisnl/jQuery-contextMenu/tree/master/src/icons
+// https://www.w3schools.com/icons/icons_reference.asp
+// https://github.com/mar10/fancytree/wiki/ExtDnd5
 
 let copy_data = null;
 
 export const attachDatatree = (treeData=null) => {
-  $('#datatree').jstree({
-    'core' : {
-      "check_callback" : function (operation, node, parent, position, more) {
-        if(operation === "copy_node" || operation === "move_node") {
-          if(parent.id === "#") {
-            return false; // prevent moving a child above or below the root
-          };
-        };
-        return true; // allow everything else
-      },
-      'data' : treeData
+  $("#datatree").fancytree({
+    extensions: ["glyph", "edit"],
+    glyph: {
+      preset: "awesome5",
+      map: {}
     },
-    "plugins" : ["types", "contextmenu", "dnd", "search"],
-    "types" : {
-      "default" : {
-        "icon" : "jstree-file"
-      },
-      "folder" : {
-        "icon" : "jstree-folder"
-      },
-      "GIS-layer-basemap" : {
-        "icon" : "fas fa-globe"
-      }
+    types: {
+      "rootnode": {icon: "fas fa-tree", iconTooltip: "(visible) rootnode"},
+      "gis-widget": {icon: "fas fa-globe", iconTooltip: "GIS widget..."},
     },
-    "search": {"case_sensitive":false},
-
-    "contextmenu": {
-      "items": function (o, cb) { // Could be an object directly
-        return {
-          "create" : {
-            "separator_before"	: false,
-            "separator_after"	: true,
-            "_disabled"			: false, //(this.check("create_node", data.reference, {}, "last")),
-            "label"				: "Create",
-            "action"			: function (data) {
-              var inst = $.jstree.reference(data.reference),
-                obj = inst.get_node(data.reference);
-                let nodedata = {
-                  "text": "testing new node",
-                  "icon": "fas fa-asterisk"
-                }
-                inst.create_node(obj, nodedata, "last", function (new_node) {
-                try {
-                  inst.edit(new_node);
-                } catch (ex) {
-                  setTimeout(function () { inst.edit(new_node); },0);
-                }
-              });
-            }
-          },
-          "rename" : {
-            "separator_before"	: false,
-            "separator_after"	: false,
-            "_disabled"			: false, //(this.check("rename_node", data.reference, this.get_parent(data.reference), "")),
-            "label"				: "Rename",
-            /*!
-            "shortcut"			: 113,
-            "shortcut_label"	: 'F2',
-            "icon"				: "glyphicon glyphicon-leaf",
-            */
-            "action"			: function (data) {
-              var inst = $.jstree.reference(data.reference),
-                obj = inst.get_node(data.reference);
-              inst.edit(obj);
-              inst.set_icon(obj, "fas fa-car-side");
-            }
-          },
-          "remove" : {
-            "separator_before"	: false,
-            "icon"				: false,
-            "separator_after"	: false,
-            "_disabled"			: false, //(this.check("delete_node", data.reference, this.get_parent(data.reference), "")),
-            "label"				: "Delete",
-            "action"			: function (data) {
-              var inst = $.jstree.reference(data.reference),
-                obj = inst.get_node(data.reference);
-              if(inst.is_selected(obj)) {
-                inst.delete_node(inst.get_selected());
-              }
-              else {
-                inst.delete_node(obj);
-              }
-            }
-          },
-          "ccp" : {
-            "separator_before"	: true,
-            "icon"				: false,
-            "separator_after"	: false,
-            "label"				: "Edit",
-            "action"			: false,
-            "submenu" : {
-              "cut" : {
-                "separator_before"	: false,
-                "separator_after"	: false,
-                "label"				: "Cut",
-                "action"			: function (data) {
-                  var inst = $.jstree.reference(data.reference),
-                    obj = inst.get_node(data.reference);
-                  if(inst.is_selected(obj)) {
-                    inst.cut(inst.get_top_selected());
-                  }
-                  else {
-                    inst.cut(obj);
-                  }
-                }
-              },
-              "copy" : {
-                "separator_before"	: false,
-                "icon"				: false,
-                "separator_after"	: false,
-                "label"				: "Copy",
-                "action"			: function (data) {
-                  var inst = $.jstree.reference(data.reference),
-                    obj = inst.get_node(data.reference);
-                  if(inst.is_selected(obj)) {
-                    inst.copy(inst.get_top_selected());
-                  }
-                  else {
-                    inst.copy(obj);
-                  }
-                }
-              },
-              "paste" : {
-                "separator_before"	: false,
-                "icon"				: false,
-                "_disabled"			: function (data) {
-                  return !$.jstree.reference(data.reference).can_paste();
-                },
-                "separator_after"	: false,
-                "label"				: "Paste",
-                "action"			: function (data) {
-                  var inst = $.jstree.reference(data.reference),
-                    obj = inst.get_node(data.reference);
-                  inst.paste(obj);
-                }
-              }
-            }
-          }
-        };
+    icon: icon_datatree,
+    iconTooltip: iconTooltip_datatree,
+    select: select_datatree,
+    lazyLoad: lazyLoad_datatree,
+    init: init_datatree,
+    source: treeData,
+    edit: {
+      triggerStart: ["dblclick", "f2", "mac+enter", "shift+click"],
+      beforeEdit: function(event, data){
+        // Return false to prevent edit mode
+        //data.input = "xxx";
+        console.log(event.type, event, data);
+      },
+      edit: function(event, data){
+        // Editor was opened (available as data.input)
+        console.log(event.type, event, data);
+      },
+      beforeClose: function(event, data){
+        // Return false to prevent cancel/save (data.input is available)
+        console.log(event.type, event, data);
+        if( data.originalEvent.type === "mousedown" ) {
+          // We could prevent the mouse click from generating a blur event
+          // (which would then again close the editor) and return `false` to keep
+          // the editor open:
+//                  data.originalEvent.preventDefault();
+//                  return false;
+          // Or go on with closing the editor, but discard any changes:
+//                  data.save = false;
+        }
+      },
+      save: function(event, data){
+        // Save data.input.val() or return false to keep editor open
+        console.log("save...", this, data);
+        // Simulate to start a slow ajax request...
+        setTimeout(function(){
+          $(data.node.span).removeClass("pending");
+          // Let's pretend the server returned a slightly modified
+          // title:
+          //data.node.setTitle(data.node.title + "!");
+          data.node.setTitle(data.node.title);
+        }, 2000);
+        // We return true, so ext-edit will set the current user input
+        // as title
+        return true;
+      },
+      close: function(event, data){
+        // Editor was removed
+        if( data.save ) {
+          // Since we started an async request, mark the node as preliminary
+          $(data.node.span).addClass("pending");
+        }
       }
     }
-
-
   });
 
-  $("#searchbox").keyup(function () {
-    var searchString = $(this).val();
-    $('#datatree').jstree('search', searchString);
+  $.contextMenu({
+    selector: "#datatree span.fancytree-title",
+    build: build_contextMenu
   });
 }
 
@@ -388,16 +319,8 @@ commands.addCommand('create-new-tree', {
   caption: 'Create a new tree',
   execute: () => {
     console.log('Create a new tree');
-    //let source = [{title: "rootnode", key: make_nodeid(), "folder": true, myOwnAttr: "no-data-tree"}];
-    //$("#datatree").fancytree("option", "source", source);
-    // https://github.com/vakata/jstree/issues/2452
-    $("#datatree").jstree(true).destroy();
-    let newdata = {
-      "text": "root of new tree",
-      "state" : { "opened" : true, "selected" : true },
-      "icon" : "fas fa-tree",
-      "data": {} };
-    attachDatatree(newdata);
+    let source = [{title: "rootnode", key: make_nodeid(), "folder": true, myOwnAttr: "no-data-tree"}];
+    $("#datatree").fancytree("option", "source", source);
   }
 });
 
@@ -437,48 +360,6 @@ function make_nodeid() {
 //     $("#datatree").fancytree("option", "source", source);
 //   }
 // });
-
-
-
-function jstree2vntree(jstreeObj) {
-  let hasChilds, vnObj = {"name":"", "data":{"_vntree":{}, "_jstree":{}}};
-  for (let kk in jstreeObj){
-    if(jstreeObj.hasOwnProperty(kk)){
-      console.log(`${kk} : ${jstreeObj[kk]}`);
-      hasChilds = false;
-      switch(kk) {
-        case "text":
-          vnObj.name = jstreeObj.text
-          break;
-        case "id":
-          if (jstreeObj[kk].length === 32) {
-            vnObj.data._vntree["_nodeid"] = jstreeObj[kk];
-          }
-          //vnObj.name = ftObj.title
-          break;
-        case "data":
-          Object.assign(vnObj.data, jstreeObj.data);
-          break;
-        case "children":
-          hasChilds = true;
-          break;
-        default:
-          vnObj.data._jstree[kk] = ftObj[kk]
-      }
-
-    }
- }  
- if (hasChilds) {
-  vnObj.childs = [];
-  let childObj;
-  for (let ii=0; ii<ftObj.children.length; ii++) {
-    childObj = jstree2vntree(ftObj.children[ii]);
-    vnObj.childs.push(childObj);
-  }
- }
- return vnObj;
-}
-
 
 function fancytree2vntree(ftObj) {
   let hasChilds, vnObj = {"name":"", "data":{"_vntree":{}, "_fancytree":{}}};

@@ -3,20 +3,17 @@ const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const WebpackCdnPlugin = require('webpack-cdn-plugin');
 
-// const webpack = require('webpack');
-//   new webpack.ProvidePlugin({
-//     "window.L": "leaflet"
-//   }),
 
 const mode = process.env.NODE_ENV || 'development';
+console.log(`webpack.config.js mode=${mode}`);
 
 module.exports = {
-  entry: path.join(__dirname, 'src/index.js'),
+  entry: path.resolve(__dirname, './src/index.js'),
   mode,
   output: {
-    path: path.join(__dirname, 'app'),
-    publicPath: '/app',
-    filename: 'qwtree.js',
+    path: path.resolve(__dirname, './vntree'),
+    publicPath: '/vntree',
+    filename: 'build.js'
   },
   module: {
     rules: [
@@ -29,8 +26,8 @@ module.exports = {
   },
   plugins: [
     new HtmlWebpackPlugin({ 
-      filename: './qwtree.html',
-      template: "./index.html"
+      template: path.resolve(__dirname, './src/index.html'),
+      filename: 'index.html'
     }), // output file relative to output.path
     new WebpackCdnPlugin({
       modules: [

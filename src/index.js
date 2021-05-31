@@ -8,7 +8,7 @@ const DockPanel = lumino_widgets.DockPanel;
 
 import './vn-styles.css';
 
-import { createMenus } from './menus';
+import { createMenus, datatreeContextmenu } from './menus';
 import { commands } from './commands';
 import { attachDatatree } from './datatree';
 import { DataEditWidget } from './data-editor';
@@ -16,6 +16,17 @@ import { DataEditWidget } from './data-editor';
 
 
 export let mainApp;
+
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('/vntree/sw.js')
+    .then(reg => {
+      console.log("Registered sw.js successfully.", reg);
+    }).catch(err => {
+      console.log("Failure sw.js not registered.", err);
+    });   
+}
+
+
 
 class App extends BoxPanel {
 
@@ -73,12 +84,13 @@ class App extends BoxPanel {
     document.addEventListener('keydown', (evt) => {
       commands.processKeydownEvent(evt);
     });
+    datatreeContextmenu();
   }  
 
 }
 
 function main() {
-  let db = new PouchDB('vntree');
+  //let db = new PouchDB('vntree');
 
 
   fetch(conf_data_path)
@@ -95,9 +107,9 @@ function main() {
       console.log("confData ready", confData);
       //let app = new VnApp(confData);
 
-      db.info().then(function (info) {
-        console.log("db.info()", info);
-      })
+      // db.info().then(function (info) {
+      //   console.log("db.info()", info);
+      // })
 
       mainApp = new App(confData);
       

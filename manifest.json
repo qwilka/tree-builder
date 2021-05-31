@@ -1,0 +1,17 @@
+{
+  "name": "Visinum GIS (ol)",
+  "short_name": "vn-ol",
+  "lang": "en-US",
+  "start_url": "/vnol/index.html",
+  "display": "browser",
+  "orientation": "portrait",
+  "background_color": "#FFE9D2",
+  "theme_color": "#FFE1C4",
+  "icons": [
+    {
+      "src": "/assets/vn-icon-152.png",
+      "sizes": "152x152",
+      "type": "image/png"
+    }
+  ]
+}

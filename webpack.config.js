@@ -2,6 +2,7 @@ const path = require('path');
 
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const WebpackCdnPlugin = require('webpack-cdn-plugin');
+const {InjectManifest} = require('workbox-webpack-plugin');
 
 
 const mode = process.env.NODE_ENV || 'development';
@@ -34,6 +35,22 @@ module.exports = {
 
       ],
       publicPath: '/node_modules', // override when prod is false
+    }),
+    new InjectManifest({
+      swSrc: './src/sw.js',
+      swDest: 'sw.js',
+      include: [
+        /\.html$/,
+        /\.js$/,
+        /\.css$/,
+        /\.woff2$/,
+        /\.jpg$/,
+        /\.png$/
+      ],
+      additionalManifestEntries: [
+  //        {url:'/assets/vn-icon-152.png', revision:null},
+        {url:'/assets/favicon.ico', revision:null}                
+      ]
     }),
   ],
   devtool: 'source-map'

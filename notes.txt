@@ -59,6 +59,18 @@ JsTree
 var nodeId = $(#tree).jstree(true).get_node("node_name");
 https://stackoverflow.com/questions/7162272/how-to-change-icon-in-jstree
 
+wunderbaum
+============
+https://github.com/mar10/wunderbaum
+https://mar10.github.io/wunderbaum/
+https://mar10.github.io/wunderbaum/api/index.html
+https://mar10.github.io/wunderbaum/demo/#demo-welcome
+
+graph
+=====
+https://www.sigmajs.org/  modern JavaScript library for rendering and interacting with network graphs in the browser
+https://graphology.github.io/   Graph object for JavaScript   
+
 
 =============================================================
 // https://github.com/mar10/fancytree/wiki/ExtDnd5

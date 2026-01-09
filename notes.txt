@@ -1,7 +1,8 @@
 python3 -m http.server 8003
 http://localhost:8002/vntree/
 
-
+https://stackoverflow.com/questions/69692842/error-message-error0308010cdigital-envelope-routinesunsupported
+export NODE_OPTIONS=--openssl-legacy-provider
 webpack --mode development
 https://www.jsdelivr.com/?query=lumino
 https://www.jsdelivr.com/?query=author%3A%20jupyterlab&page=1

@@ -17,13 +17,15 @@ import { DataEditWidget } from './data-editor';
 
 export let mainApp;
 
-if ('serviceWorker' in navigator) {
+if (false && 'serviceWorker' in navigator) {
   navigator.serviceWorker.register('/vntree/sw.js')
     .then(reg => {
       console.log("Registered sw.js successfully.", reg);
     }).catch(err => {
       console.log("Failure sw.js not registered.", err);
     });   
+} else {
+  console.warn("No serviceWorker.");
 }
 
 
